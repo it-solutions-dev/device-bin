@@ -1,6 +1,4 @@
-# Fliko device binaries
+# Device binaries
 
 ## About
-Repository for "fliko-device" application binaries.
-
-WIP
+Repository for application binaries.
