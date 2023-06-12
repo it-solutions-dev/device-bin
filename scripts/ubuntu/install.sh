@@ -21,9 +21,15 @@ install_folder=$(find /usr/lib -name fliko-device)
 # check if folder exists
 if [ -z "$install_folder" ]
 then
-      echo "Folder not found"
+      echo "Folder not found, install script failed"
       exit 1
 fi
 
 # change permissions
-sudo chmod 777 $install_folder
+echo "Changing permissions for $install_folder"
+sudo chmod -R 777 $install_folder
+
+echo "Installed successfully"
+
+# add auto startup
+echo "Adding auto startup"
