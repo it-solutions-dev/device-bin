@@ -1,25 +1,22 @@
-#!/bin/sh
+#!/bin/bash
 
 # find install folder fliko-device
-lib_folder=$(find /usr/lib -name fliko-device)
+root_dir=~/kiosk/fliko-device
 
 # check if folder exists
-if [ -z "$lib_folder" ]
+if [ ! -d $root_dir ]
 then
-      echo "Folder not found"
+      echo "App not installed"
       exit 1
 fi
 
 # remove app
-sudo apt remove fliko-device
+rm -rf $root_dir
 
-# remove install folder
-sudo rm -rf $lib_folder
+# remove sed -i ~/kiosk/fliko-device/current from $PATH
+sed -i '/kiosk\/fliko-device\/current/d' ~/.bashrc
 
+# restart bash
+source ~/.bashrc
 
-
-# sed url from stream: browser_download_url": "https://github.com/it-solutions-dev/device-bin/releases/download/v0.3.2/fliko-device_0.3.2_amd64.deb"
-
-
-
-
+echo "Fliko device app removed"

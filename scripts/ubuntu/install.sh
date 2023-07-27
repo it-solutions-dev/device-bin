@@ -1,35 +1,62 @@
-#!/bin/sh
+#!/bin/bash
 
-# find download url
-download_url=$(curl --silent https://api.github.com/repos/it-solutions-dev/device-bin/releases/latest | grep '"browser_download_url"' | grep .deb | grep -Eo 'https://[^ >]+\w' | head -1)
+# check if kiosk dir exists
+root_dir=~/kiosk/fliko-device
 
-echo "Downloading $download_url"
-
-# download
-wget $download_url
-
-# get file name and install it
-file_name=$(ls | grep fliko-device)
-sudo apt install ./$file_name
-
-# remove downloaded file
-rm $file_name
-
-# find install folder and change permissions
-install_folder=$(find /usr/lib -name fliko-device)
-
-# check if folder exists
-if [ -z "$install_folder" ]
+if [ ! -d $root_dir ]
 then
-      echo "Folder not found, install script failed"
+      echo "Creating kiosk folder"
+      mkdir -p $root_dir/current
+      touch $root_dir/latest.json
+      touch $root_dir/version.txt
+else 
+      echo "$root_dir already exists use update script or remove before isntalling"
       exit 1
 fi
 
-# change permissions
-echo "Changing permissions for $install_folder"
-sudo chmod -R 777 $install_folder
+# download latest json 
+latest_file=$root_dir/latest.json
+version_file=$root_dir/version.txt
+curl --silent https://api.github.com/repos/it-solutions-dev/device-bin/releases/latest > $latest_file
 
-echo "Installed successfully"
+# extract download and version number
+version=$(cat $latest_file | grep '"tag_name"' | grep -Eo '[0-9]+.[0-9]+.[0-9]+')
+download_url=$(cat $latest_file | grep '"browser_download_url"' | grep -Eo 'https://[^ >]+\w' | grep '.zip$')
 
-# add auto startup
-echo "Adding auto startup"
+echo "Latest version is $version"
+echo "Downloading $download_url"
+
+# downlaod
+wget $download_url -P $root_dir
+
+# change context location to root_dir
+cd $root_dir
+
+zip_file_name=$(ls | grep fliko-device)
+
+# rename zip file to fd.zip
+mv $zip_file_name fd.zip
+zip_file_name=fd.zip
+
+echo "Unzipping $zip_file_name" 
+
+# unzip in root_dir
+unzip -o -q $zip_file_name -d $root_dir
+unziped_folder=$(ls -d */ | grep fliko-device)
+
+#rename $unziped_folder to version number
+mv $root_dir/$unziped_folder $root_dir/$version
+
+# remove downloaded file
+rm $zip_file_name
+
+# create symlink from fliko-device-linux-x64 to /current
+ln -nfs $root_dir/$version/* $root_dir/current
+
+#publish path to bashrc
+echo 'Adding /kiosk/fliko-device/current to PATH'
+echo "export PATH=$PATH:$root_dir/current" >> ~/.bashrc
+
+# restart bash
+source ~/.bashrc
+
