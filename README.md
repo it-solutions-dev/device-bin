@@ -55,32 +55,33 @@ chomod +x autostart.sh
 ```
 
 
+## Kiosk display
+
+- Setup kiosk URL and Display https://wiki.ubuntu.com/X/InputCoordinateTransformation
+    - use echo $DISPLAY to get display number
+    - set correct orreintation for touch screen
+    - 90 - (clockwise left to right) 
+        * 0 -1 1 1 0 0 0 0 1
+    - 90 - (counter clockwise from right to left) 
+        * 0 1 0 -1 0 1 0 0 1
+    - 180 - (clockwise or counterclockwise 180°) 
+        *   -1 0 1 0 -1 1 0 0 1
+
 ## Kiosk service
 
-- Kiosk service - start chrome with given params show always start and restart if crashes + setup touch screen
+Kiosk service - start chrome with given params show always start and restart if crashes + setup touch screen  
+- [Kiosk service](./scripts/ubuntu/kiosk.service)
+- [Setup kiosk display](#kiosk-display)
+- Setup kiosk URL in kiosk serivce
 
-```bash
-[Unit]
-Description=Kiosk service
-Wants=graphical.target
-After=graphical.target
-
-[Service]
-Environment=DISPLAY=:0.0
-Type=simple
-ExecStartPre=-/usr/bin/xinput set-prop "Nexio Touch Device (HS) Nexio HID Multi-Touch ATI0400-10"  --type=float "Coordinate Transformation Matrix" 0.0, -1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0
-ExecStartPre=-/usr/bin/xset s off
-ExecStartPre=-/usr/bin/xset s noblank
-ExecStartPre=-/usr/bin/xset -dpms
-ExecStartPre=-/bin/sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' /home/kiosk/.config/chromium/Default/Preferences
-ExecStartPre=-/bin/sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' /home/kiosk/.config/chromium/Default/Preferences
-ExecStartPre=-/bin/bash -c '/usr/bin/unclutter -idle 0.5 -root &'
-ExecStart=/bin/bash -c 'google-chrome --check-for-update-interval=31536000 --noerrdialogs --disable-infobars --disable-pinch -overscroll-history-navigation=0 --autoplay-policy=no-user-gesture-required --enable-features=OverlayScrollbar --password-store=basic --kiosk <REPLACE WITH YOUR URL>'
-Restart=always
-User=kiosk
-Group=kiosk
-
-[Install]
-WantedBy=graphical.target
-```
-
+- Upload services to `~/config/systemd/user/`
+- Reload services `systemctl --user daemon-reload`
+- Enable services:
+    - `systemctl --user enable kiosk.service`
+    - `systemctl --user enable fliko-device.service`
+- Start services: 
+    - `systemctl --user start kiosk.service`
+    - `systemctl --user start fliko-device.service`
+- Check status:
+    - `systemctl --user status kiosk.service`
+    - `systemctl --user status fliko-device.service`

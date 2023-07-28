@@ -1,0 +1,14 @@
+[Unit]
+Description=Fliko device service
+Wants=graphical.target
+After=graphical.target
+
+[Service]
+ExecStart=/usr/bin/bash ~/kiosk/autostart.sh
+Type=simple
+Restart=always
+RestartSec=5
+TimeoutSec=5
+
+[Install]
+WantedBy=multi-user.target
