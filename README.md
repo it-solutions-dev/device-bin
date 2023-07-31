@@ -67,12 +67,7 @@ chomod +x autostart.sh && \
     - 180 - (clockwise or counterclockwise 180°) 
         *   -1 0 1 0 -1 1 0 0 1
 
-## Kiosk service
-
-Kiosk service - start chrome with given params 
-- [Kiosk service](./scripts/ubuntu/services/kiosk.service)
-    - Setup kiosk URL in kiosk serivce
-- [Setup kiosk display](#kiosk-display)
+# Systemd service:
 
 - Upload services to `~/config/systemd/user/`
 - Reload services `systemctl --user daemon-reload`
@@ -86,6 +81,15 @@ Kiosk service - start chrome with given params
     - `systemctl --user status kiosk.service`
     - `systemctl --user status fliko-device.service`
 
+## Kiosk service
+
+Kiosk service - start chrome with given params 
+- [Kiosk service](./scripts/ubuntu/services/kiosk.service)
+    - Setup kiosk URL in kiosk serivce
+- [Setup kiosk display](#kiosk-display)
+
+
 ## Device app service 
 
 Used to startup device app
+- [Device app service](./scripts/ubuntu/services/fliko-device.service)
