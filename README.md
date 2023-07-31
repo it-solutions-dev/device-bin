@@ -25,32 +25,32 @@ chomod +x autostart.sh
 ## Install
 
 ```bash
-wget https://raw.githubusercontent.com/it-solutions-dev/device-bin/master/scripts/ubuntu/install.sh
-chomod +x install.sh
+wget https://raw.githubusercontent.com/it-solutions-dev/device-bin/master/scripts/ubuntu/install.sh && \
+chomod +x install.sh && \
 ./install.sh
 ```
 
 ## Update
 
 ```bash
-wget https://raw.githubusercontent.com/it-solutions-dev/device-bin/master/scripts/ubuntu/update.sh
-chomod +x update.sh
+wget https://raw.githubusercontent.com/it-solutions-dev/device-bin/master/scripts/ubuntu/update.sh && \
+chomod +x update.sh && \
 ./update.sh
 ```
 
 ## Remove
 
 ```bash
-wget https://raw.githubusercontent.com/it-solutions-dev/device-bin/master/scripts/ubuntu/remove.sh
-chomod +x remove.sh
+wget https://raw.githubusercontent.com/it-solutions-dev/device-bin/master/scripts/ubuntu/remove.sh && \
+chomod +x remove.sh && \
 ./remove.sh
 ```
 
 ## Auto starter (update -> start app)
 
 ```bash
-wget https://raw.githubusercontent.com/it-solutions-dev/device-bin/master/scripts/ubuntu/autostart.sh
-chomod +x autostart.sh
+wget https://raw.githubusercontent.com/it-solutions-dev/device-bin/master/scripts/ubuntu/autostart.sh && \
+chomod +x autostart.sh && \
 ./autostart.sh
 ```
 
@@ -69,10 +69,10 @@ chomod +x autostart.sh
 
 ## Kiosk service
 
-Kiosk service - start chrome with given params show always start and restart if crashes + setup touch screen  
-- [Kiosk service](./scripts/ubuntu/kiosk.service)
+Kiosk service - start chrome with given params 
+- [Kiosk service](./scripts/ubuntu/services/kiosk.service)
+    - Setup kiosk URL in kiosk serivce
 - [Setup kiosk display](#kiosk-display)
-- Setup kiosk URL in kiosk serivce
 
 - Upload services to `~/config/systemd/user/`
 - Reload services `systemctl --user daemon-reload`
@@ -85,3 +85,7 @@ Kiosk service - start chrome with given params show always start and restart if 
 - Check status:
     - `systemctl --user status kiosk.service`
     - `systemctl --user status fliko-device.service`
+
+## Device app service 
+
+Used to startup device app
