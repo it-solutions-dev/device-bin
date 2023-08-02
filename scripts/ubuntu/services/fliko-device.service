@@ -1,14 +1,18 @@
 [Unit]
 Description=Fliko device service
-Wants=graphical.target
-After=graphical.target
+After=basic.target kiosk.service
+Requires=basic.target
 
 [Service]
-ExecStart=/usr/bin/bash ~/kiosk/autostart.sh
+ExecStartPre=-/bin/bash ./kiosk/update.sh
+ExecStart=/bin/bash ./kiosk/autostart.sh
 Type=simple
 Restart=always
 RestartSec=5
-TimeoutSec=5
+# Set longer timeout since this process is expected to update software (download could take a while)
+TimeoutStartSec=1200
+TimeoutStopSec=30
+WorkingDirectory=~
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=basic.target

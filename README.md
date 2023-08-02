@@ -6,6 +6,12 @@ Repository for application binaries.
 
 # Ubuntu
 
+Install jq for json parsing and shell scripts https://jqlang.github.io/jq/download/
+
+```bash
+    sudo apt-get install jq
+```
+
 ## Download all script set permissions install app
 
 ```bash
@@ -54,6 +60,17 @@ chomod +x autostart.sh && \
 ./autostart.sh
 ```
 
+## Reboot script 
+
+- [Auto restart script](./scripts/ubuntu/reboot.sh) - script receives URL as parameter to get remote settings
+- ```bash
+    wget https://raw.githubusercontent.com/it-solutions-dev/device-bin/master/scripts/ubuntu/reboot.sh && \
+    chomod +x reboot.sh && \
+    ```
+- Example `./reboot.sh <URL>`
+
+
+
 
 ## Kiosk display
 
@@ -80,6 +97,23 @@ chomod +x autostart.sh && \
 - Check status:
     - `systemctl --user status kiosk.service`
     - `systemctl --user status fliko-device.service`
+
+- Servive logs:
+    - `journalctl --user -xeu kiosk.service`
+    - `journalctl --user -xeu fliko-device.service`
+## Setup journald automatic cleanup
+
+- `sudo nano /etc/systemd/journald.conf`
+
+- ```
+    # Set the maximum size of the journal logs in bytes
+    SystemMaxUse=1G
+    
+    # Set the number of days after which logs will be deleted
+    MaxRetentionSec=14d
+    ```
+
+- `sudo systemctl restart systemd-journald`
 
 ## Kiosk service
 

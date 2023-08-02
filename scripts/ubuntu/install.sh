@@ -1,5 +1,10 @@
 #!/bin/bash
 
+function format_json_file() 
+{
+      jq . $1 > $1.tmp && mv $1.tmp $1
+}
+
 # check if kiosk dir exists
 root_dir=~/kiosk/fliko-device
 
@@ -17,7 +22,10 @@ fi
 # download latest json 
 latest_file=$root_dir/latest.json
 version_file=$root_dir/version.txt
-curl --silent https://api.github.com/repos/it-solutions-dev/device-bin/releases/latest > $latest_file
+curl -s -o $latest_file https://api.github.com/repos/it-solutions-dev/device-bin/releases/latest
+
+# making sure that json file formatted for grep
+format_json_file $latest_file
 
 # extract download and version number
 remote_version=$(cat $latest_file | grep '"tag_name"' | grep -Eo '[0-9]+.[0-9]+.[0-9]+')

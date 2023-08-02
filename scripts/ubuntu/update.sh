@@ -5,22 +5,33 @@ function version
       echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; 
 }
 
-# check if fliko-device running
-
+function format_json_file() 
+{
+      jq . $1 > $1.tmp && mv $1.tmp $1
+}
 
 root_dir=~/kiosk/fliko-device
+cache_dir=./cache
+latest_json_file=$cache_dir/latest.json
 
 # check if root_dir or version file exists
 # check if version file exists
 
+processes=$(ps -ef | grep fliko-device | grep -v grep)
+
+if [ -z "$processes" ]
+then
+      echo "No fliko-device processes running"
+else
+      echo "Killing fliko-device processes"
+      echo "$processes" | awk '{print $2}' | xargs kill -9
+fi
 
 if [ ! -d $root_dir ] || [ ! -f $root_dir/version.txt ]
 then
       echo "App installed incorrectlly run remove or install scripts first"
       exit 1
 fi
-
-latest_json_file=$root_dir/latest.json
 
 echo "Checking for $latest_json_file file"
 
@@ -30,7 +41,10 @@ then
       touch $latest_json_file
 fi
 
-curl -s https://api.github.com/repos/it-solutions-dev/device-bin/releases/latest > $latest_json_file
+curl -s -o $latest_json_file https://api.github.com/repos/it-solutions-dev/device-bin/releases/latest
+
+# making sure that json file formatted for grep
+format_json_file $latest_json_file
 
 current_version=$(cat $root_dir/version.txt)
 remote_version=$(cat $latest_json_file | grep '"tag_name"' | grep -Eo '[0-9]+.[0-9]+.[0-9]+')
@@ -84,7 +98,9 @@ ln -nfs $root_dir/$remote_version/* $root_dir/current/
 
 # remove old version
 rm -rf $root_dir/$current_version
-
+ 
 # update version file
 echo $remote_version > $root_dir/version.txt
 echo "Update complete, updated to $remote_version"
+
+# check if service is enabled and not running start it
