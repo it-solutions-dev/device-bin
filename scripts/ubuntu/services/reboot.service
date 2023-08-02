@@ -1,0 +1,15 @@
+[Unit]
+Description=Device reboot service
+After=basic.target kiosk.service
+Requires=basic.target
+
+[Service]
+ExecStart=/bin/bash ./kiosk/reboot.sh <DEVICE_PUBLIC_PARAMS_URL>
+Type=simple
+Restart=always
+RestartSec=5
+TimeoutSec=5
+WorkingDirectory=~
+
+[Install]
+WantedBy=basic.target

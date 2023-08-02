@@ -1,0 +1,15 @@
+[Unit]
+Description=Device ping service
+After=basic.target kiosk.service
+Requires=basic.target
+
+[Service]
+ExecStart=/bin/bash ./kiosk/ping.sh <DEVICE_PING_URL>
+Type=simple
+Restart=always
+RestartSec=5
+TimeoutSec=5
+WorkingDirectory=~
+
+[Install]
+WantedBy=basic.target
