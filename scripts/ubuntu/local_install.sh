@@ -24,20 +24,21 @@ fi
 # download latest json 
 latest_file=$root_dir/latest.json
 version_file=$root_dir/version.txt
-curl -s -o $latest_file $1
 
 # making sure that json file formatted for grep
 format_json_file $latest_file
 
 # extract download and version number
-remote_version=$(cat $latest_file | grep '"version"' | grep -Eo '[0-9]+.[0-9]+.[0-9]+')
-download_url=$(cat $latest_file | grep '"download_url"' | grep -Eo 'https://[^ >]+\w' | grep '.zip$')
+zip_path=$1
 
-echo "Latest version is $version"
-echo "Downloading $download_url"
+version=$(echo $zip_path | grep -Eo '\-[0-9]+.[0-9]+.[0-9]+' | grep -Eo '[0-9]+.[0-9]+.[0-9]+')
 
-# downlaod
-wget $download_url -P $root_dir
+echo "Version is $version"
+echo "Path is $zip_path"
+
+echo "Moving $zip_path to $root_dir"
+
+cp $zip_path $root_dir
 
 # change context location to root_dir
 cd $root_dir
@@ -52,17 +53,18 @@ echo "Unzipping $zip_file_name"
 
 # unzip in root_dir
 unzip -o -q $zip_file_name -d $root_dir
+
 unziped_folder=$(ls -d */ | grep fliko-device)
 
 
-# rsync or mv folder to remote_version folder
-if [ ! -d $root_dir/$remote_version ]
+
+# check if version folder exists
+
+if [ ! -d $root_dir/$version ]
 then
-      echo "Moving"
-      mv -f $root_dir/$unziped_folder $root_dir/$remote_version
+      mv -f $root_dir/$unziped_folder $root_dir/$version
 else
-      echo "Rsync"
-      rsync -a $root_dir/$unziped_folder/ $root_dir/$remote_version
+      rsync -a $root_dir/$unziped_folder/ $root_dir/$version
 fi
 
 # remove downloaded file
@@ -72,7 +74,7 @@ rm $zip_file_name
 ln -nfs $root_dir/$version/* $root_dir/current/
 
 # record version to file
-echo $remote_version > $version_file
+echo $version > $version_file
 
 #publish path to bashrc
 echo 'Adding /kiosk/fliko-device/current to PATH'

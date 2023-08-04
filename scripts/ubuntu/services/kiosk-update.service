@@ -1,8 +1,7 @@
 [Unit]
-Description=Kiosk service
-After=sockets.target fliko-device.service
+Description=Kiosk update window service
+After=basic.target sockets.target
 Requires=basic.target sockets.target
-BindsTo=fliko-device.service
 
 [Service]
 Environment=DISPLAY=:0.0
@@ -14,9 +13,6 @@ ExecStartPre=-/usr/bin/xset -dpms
 ExecStartPre=-/bin/sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' /home/kiosk/.config/google-chrome/Default/Preferences
 ExecStartPre=-/bin/sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' /home/kiosk/.config/google-chrome/Default/Preferences
 ExecStart=/bin/bash -c 'google-chrome --check-for-update-interval=31536000 --noerrdialogs --disable-infobars --disable-pinch -overscroll-history-navigation=0 --autoplay-policy=no-user-gesture-required --enable-features=OverlayScrollbar --password-store=basic --kiosk <KIOSK_SETUP_URL>' | wmctrl -r "Google Chrome" -b toggle,above
-RestartSec=5
-Restart=on-failure
-TimeoutSec=30
 
 [Install]
 WantedBy=sockets.target

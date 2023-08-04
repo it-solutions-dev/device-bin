@@ -12,6 +12,12 @@ Install jq for json parsing and shell scripts https://jqlang.github.io/jq/downlo
     sudo apt-get install jq
 ```
 
+Install wmctrl control windows from command line
+
+```bash
+    sudo apt-get install wmctrl
+```
+
 ## Download all script set permissions install app
 
 ```bash
