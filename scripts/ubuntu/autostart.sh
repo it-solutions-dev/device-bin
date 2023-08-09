@@ -4,5 +4,8 @@
 
 ~/kiosk/update.sh $1
 
-echo "Starting fliko-device"
+# starting kiosk service
+
+
+echo "Starting device"
 ~/kiosk/fliko-device/current/fliko-device

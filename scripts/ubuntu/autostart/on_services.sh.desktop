@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=/home/kiosk/kiosk/on_services.sh
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[en_US]=Start kiosk services
+Name=Start kiosk serices
+Comment[en_US]=
+Comment=

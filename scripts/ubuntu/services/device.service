@@ -12,6 +12,3 @@ RestartSec=5
 TimeoutStartSec=300
 TimeoutStopSec=30
 WorkingDirectory=~
-
-[Install]
-WantedBy=basic.target
