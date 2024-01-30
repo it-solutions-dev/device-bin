@@ -1,0 +1,20 @@
+[Unit]
+Description=Kiosk update window service
+After=basic.target sockets.target graphical.target
+Requires=basic.target sockets.target
+
+[Service]
+Environment=DISPLAY=:0.0
+Type=simple
+ExecStartPre=-/usr/bin/xset s off
+ExecStartPre=-/usr/bin/xset s noblank
+ExecStartPre=-/usr/bin/xset -dpms
+ExecStartPre=-/bin/sed -i 's/"exited_cleanly":\s*false/"exited_cleanly":true/' "$HOME/.config/chromium/Default/Preferences"
+ExecStartPre=-/bin/sed -i 's/"exit_type":\s*"Crashed"/"exit_type":"None"/' "$HOME/.config/chromium/Default/Preferences"
+ExecStart=/bin/bash -c 'chromium-browser --noerrdialogs --check-for-update-interval=31536000 --disable --disable-translate --disable-infobars --disable-pinch --disable-suggestions-service --disable-save-password-bubble --autoplay-policy=no-user-gesture-required --password-store=basic --start-maximized --enable-features=OverlayScrollbar --noerrdialogs --disable-component-update --kiosk --incognito "$DEVICE_UPDATE_PAGE_URL"'
+ExecStartPost=-/usr/bin/xinput set-prop "Nexio Touch Device (HS) Nexio HID Multi-Touch ATI0400-10"  --type=float "Coordinate Transformation Matrix" 0.0, -1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0
+ExecStartPost=-/bin/bash -c 'wmctrl -r "Chromium" -b add,above'
+RestartSec=5
+Restart=always
+TimeoutSec=30
+

@@ -4,7 +4,7 @@ After=basic.target kiosk.service
 Requires=basic.target
 
 [Service]
-ExecStart=/bin/bash ./kiosk/ping.sh "<DEVICE_PING_URL>"
+ExecStart=/bin/bash ./kiosk/ping.sh $DEVICE_PING_URL
 Type=simple
 Restart=always
 RestartSec=5

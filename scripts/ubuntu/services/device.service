@@ -5,7 +5,7 @@ Requires=basic.target
 Wants=network-online.target
 
 [Service]
-ExecStart=/bin/bash ./kiosk/autostart.sh <LATEST_OS_RELEASE>
+ExecStart=/bin/bash ./kiosk/autostart.sh $LATEST_OS_RELEASE_URL
 Type=simple
 Restart=always
 RestartSec=5
