@@ -158,3 +158,7 @@ wmctrl -r "Google Chrome" -b toggle,above
 wmctrl -r "Chromium" -b toggle,above
 
 ```
+
+## Autostart script (turn on service on boot)
+
+Move `on_services.sh.desktop` to `~/.config/autostart/`

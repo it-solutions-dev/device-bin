@@ -12,7 +12,7 @@ ExecStartPre=-/usr/bin/xset s noblank
 ExecStartPre=-/usr/bin/xset -dpms
 ExecStartPre=-/bin/sed -i 's/"exited_cleanly":\s*false/"exited_cleanly":true/' "$HOME/.config/chromium/Default/Preferences"
 ExecStartPre=-/bin/sed -i 's/"exit_type":\s*"Crashed"/"exit_type":"None"/' "$HOME/.config/chromium/Default/Preferences"
-ExecStart=/bin/bash -c 'chromium-browser --noerrdialogs --check-for-update-interval=31536000 --disable --disable-translate --disable-infobars --disable-pinch --disable-suggestions-service --disable-save-password-bubble --autoplay-policy=no-user-gesture-required --password-store=basic --start-maximized --enable-features=OverlayScrollbar --noerrdialogs --disable-component-update --kiosk --incognito "$DEVICE_SETUP_URL"'
+ExecStart=/bin/bash -c 'chromium-browser --noerrdialogs --check-for-update-interval=31536000 --disable --disable-translate --disable-infobars --disable-pinch --disable-suggestions-service --disable-save-password-bubble --autoplay-policy=no-user-gesture-required --password-store=basic --start-maximized --enable-features=OverlayScrollbar --noerrdialogs --disable-component-update --kiosk --incognito $DEVICE_SETUP_URL'
 RestartSec=5
 Restart=always
 TimeoutSec=30

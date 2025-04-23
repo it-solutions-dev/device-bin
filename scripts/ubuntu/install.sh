@@ -33,7 +33,7 @@ format_json_file $latest_file
 remote_version=$(cat $latest_file | grep '"version"' | grep -Eo '[0-9]+.[0-9]+.[0-9]+')
 download_url=$(cat $latest_file | grep '"download_url"' | grep -Eo 'https://[^ >]+\w' | grep '.zip$')
 
-echo "Latest version is $version"
+echo "Latest version is $remote_version"
 echo "Downloading $download_url"
 
 # downlaod
@@ -69,7 +69,7 @@ fi
 rm $zip_file_name
 
 # create symlink from fliko-device-linux-x64 to /current
-ln -nfs $root_dir/$version/* $root_dir/current/
+ln -nfs $root_dir/$remote_version/* $root_dir/current/
 
 # record version to file
 echo $remote_version > $version_file
