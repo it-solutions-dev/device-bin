@@ -4,6 +4,12 @@
 
 Repository for application binaries.
 
+# OS
+
+-   [Ubuntu](/scripts/ubuntu/)
+-   [Windows](/scripts/win/)
+    -   Windows kiosk - upload to `C:\kiosk\`, if file `stop.txt` exists in folder kiosk watchdog script will stop
+
 ## Download all script set permissions & install app
 
 ```bash
