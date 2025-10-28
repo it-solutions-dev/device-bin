@@ -4,7 +4,7 @@ REM === Configuration ===
 set "CHROME_PATH=C:\Program Files\Google\Chrome\Application\chrome.exe"
 set "FLIKO_PATH=%LOCALAPPDATA%\fliko_device\fliko-device.exe"
 set "CHECK_INTERVAL=5"
-set "KIOSK_URL=URL"
+set "KIOSK_URL=KIOSK_SETUP_URL"
 
 if not exist "%CHROME_PATH%" (
     echo ERROR: Chrome not found at "%CHROME_PATH%"
