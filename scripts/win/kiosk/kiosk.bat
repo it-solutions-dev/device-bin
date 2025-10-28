@@ -4,7 +4,7 @@ REM === Configuration ===
 set "CHROME_PATH=C:\Program Files\Google\Chrome\Application\chrome.exe"
 set "FLIKO_PATH=%LOCALAPPDATA%\fliko_device\fliko-device.exe"
 set "CHECK_INTERVAL=5"
-set "KIOSK_URL=https://KIOSK_SETUP_URL"
+set "KIOSK_URL=URL"
 
 if not exist "%CHROME_PATH%" (
     echo ERROR: Chrome not found at "%CHROME_PATH%"
@@ -28,7 +28,7 @@ echo Starting Kiosk...
 tasklist /fi "imagename eq chrome.exe" | find /i "chrome.exe" >nul
 if errorlevel 1 (
     echo Kiosk stopped, starting...
-    start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --kiosk --check-for-update-interval=31536000 --noerrdialogs --disable-infobars --disable-pinch --overscroll-history-navigation=0 --autoplay-policy=no-user-gesture-required --enable-features=OverlayScrollbar --password-store=basic "%KIOSK_URL%"
+    start "" "C:\Program Files\Google\Chrome\Application\chrome.exe" --kiosk --disk-cache-size=1 --v8-cache-options=none --incognito --check-for-update-interval=31536000 --noerrdialogs --disable-infobars --disable-pinch --overscroll-history-navigation=0 --autoplay-policy=no-user-gesture-required --enable-features=OverlayScrollbar --password-store=basic "%KIOSK_URL%"
 )
 
 tasklist /fi "imagename eq fliko-device.exe" | find /i "fliko-device.exe" >nul
@@ -39,7 +39,7 @@ if errorlevel 1 (
 )
 
 REM === Check for stop.txt trigger ===
-if exist stop.txt (
+if exist "C:\kiosk\stop.txt" (
     echo [%time%] stop.txt detected, exiting watchdog...
     del stop.txt
     timeout /t %CHECK_INTERVAL% >nul
